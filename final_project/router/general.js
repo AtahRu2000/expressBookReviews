@@ -27,20 +27,43 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  let author=req.params.author;
-  return res.status(300).json({message: "The book for the author is ", book: books[author]});
+  let rqauthor=req.params.author;
+  let founbooks=[];
+  Object.values(books).forEach(book =>{
+    if (rqauthor == book.author){
+        founbooks.push(book);
+    }  
+  })
+  if (founbooks.length > 0){
+    return res.status(200).json({message: "Books found for that author are ", book:founbooks});
+  }else{
+    return res.status(404).json({message: 'No book was found for ${rqauthor}'});
+  }
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let rqtitle=decodeURIComponent(req.params.title);
+  let foundtitle=[];
+  Object.values(books).forEach(book => {
+    if (rqtitle.toLowerCase()==book.title.toLowerCase()){
+        foundtitle.push(book);
+    }
+  })
+  if (foundtitle.length>0){
+    return res.status(200).json({message: "Books found with that Title are ", title:foundtitle});
+  }else{
+    return res.status(404).json({message: "There are no books with that Title"});
+  }
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let isbn=req.params.isbn;
+  let review=books[isbn].reviews;
+  return res.status(200).json({message: "Reviews are ", reviews: review});
 });
 
 module.exports.general = public_users;
