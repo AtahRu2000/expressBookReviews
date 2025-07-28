@@ -10,20 +10,21 @@ app.use(express.json());
 
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
-app.use("/customer/auth/*", function auth(req,res,next){
-//Write the authenication mechanism here
-    if (authenticatedUser(username, password)) {
-        // Generate JWT access token
-        let accessToken = jwt.sign({
-            data: password
-        }, 'access', { expiresIn: 60 * 60 });
-        // Store access token and username in session
-        req.session.authorization = {
-            accessToken, username
+app.use("/customer/auth/*", function(req, res, next) {
+    if (req.session.authorization && req.session.authorization.accessToken) {
+        let token = req.session.authorization.accessToken;
+
+        jwt.verify(token, "access", (err, user) => { // 'access' debe ser la misma clave secreta que usas para firmar
+            if (!err) {
+                req.user = user; 
+                req.username = req.session.authorization.username; // Pasa el username del session
+                next();
+            } else {
+                return res.status(403).json({ message: "User not authenticated or token invalid." });
             }
-        return res.status(200).send("User successfully logged in");
+        });
     } else {
-        return res.status(208).json({ message: "Invalid Login. Check username and password" });
+        return res.status(403).json({ message: "User not logged in." });
     }
 });
  
