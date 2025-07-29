@@ -45,7 +45,7 @@ public_users.get('/',function (req, res) {
     });
   })
 });
-*
+*/
 
 
 // Get book details based on ISBN
@@ -54,7 +54,24 @@ public_users.get('/isbn/:isbn',function (req, res) {
   let isbn=req.params.isbn;
   return res.status(300).json({message:"Book is ", book: books[isbn]});
  });
-  
+/*
+ public_users.get('/isbn/:isbn',async function (req, res) {
+    try{
+        let bookList = await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                let isbn=req.params.isbn;
+                resolve(books[isbn]);
+            },6000)
+        });
+        return res.status(300).json({message:"Book is ", book: bookList});
+    }catch(error){
+        console.error("Error al obtener la lista de libros:", error);
+        return res.status(500).json({ message: "Error retrieving book list.", error: error });
+
+    };
+ });
+  */
+ 
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
