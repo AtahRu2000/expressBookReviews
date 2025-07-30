@@ -88,7 +88,30 @@ public_users.get('/author/:author',function (req, res) {
     return res.status(404).json({message: 'No book was found for ${rqauthor}'});
   }
 });
+/*
+// Asyn / Await
+public_users.get('/author/:author',function (req, res) {
+  //Write your code here
+  let rqauthor=req.params
+  let founbooks=[];
+  try{
+    Object.values(books).forEach(book =>{
+    if (rqauthor == book.author){
+        founbooks.push(book);
+    }  
+  })
+  if (founbooks.length > 0){
+    return res.status(200).json({message: "Books found for that author are ", book:founbooks});
+  }else{
+    return res.status(404).json({message: 'No book was found for ${rqauthor}'});
+  }
+  }catch(error){
+    console.error("Error al obtener la lista de libros:", error);
+    return res.status(500).json({ message: "Error retrieving book list.", error: error });
 
+  };
+});
+*/
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
@@ -105,7 +128,31 @@ public_users.get('/title/:title',function (req, res) {
     return res.status(404).json({message: "There are no books with that Title"});
   }
 });
+/*
+//Async / Await
+public_users.get('/title/:title',function (req, res) {
+    //Write your code here
+    let rqtitle=decodeURIComponent(req.params.title);
+    let foundtitle=[];
+    try{
+        Object.values(books).forEach(book => {
+            if (rqtitle.toLowerCase()==book.title.toLowerCase()){
+                foundtitle.push(book);
+            }
+          })
+          if (foundtitle.length>0){
+            return res.status(200).json({message: "Books found with that Title are ", title:foundtitle});
+          }else{
+            return res.status(404).json({message: "There are no books with that Title"});
+          }
 
+    }catch(error){
+        console.error("Error al obtener la lista de libros:", error);
+        return res.status(500).json({ message: "Error retrieving book list.", error: error });
+
+    };
+});
+*/
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
